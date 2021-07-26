@@ -5,8 +5,3 @@
     -   资源异常：script，link 资源加载异常
     -   接口异常：ajax 或 fetch 请求接口异常
     -   白屏：页面空白
-
-## 参考
-
--   [web-monitoring](https://github.com/kisslove/web-monitoring)
--   [从零开始搭建前端监控系统（一）——web 探针 sdk](https://juejin.cn/post/6844903953319067655#heading-15)
