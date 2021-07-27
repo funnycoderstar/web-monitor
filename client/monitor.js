@@ -1,7 +1,7 @@
 window.addEventListener(
     'error',
     (event) => {
-        console.log(111, event);
+        console.log('addEventListener error', event);
         const typeName = event.target.localName;
         if (typeName) {
             console.log('静态资源加载错误', typeName, event);
@@ -18,7 +18,6 @@ window.addEventListener(
             };
             console.log(`静态资源${typeName}加载错误日志`, log);
         } else {
-            console.log(999999, event);
             const log = {
                 kind: 'stability',
                 type: 'error',
@@ -129,11 +128,53 @@ function reportFetchError(event) {
     console.log('fetch接口请求错误日志', log);
 }
 
+// function parseDataPlatform1({ type, response }) {
+//     if (type === 'fetch') {
+//         if (!response.ok) {
+//             return {
+//                 error: 1,
+//             };
+//         } else {
+//             if (response.data.errCode !== 0) {
+//                 return {
+//                     error: 2,
+//                 };
+//             }
+//         }
+//         return {
+//             error: 0,
+//         };
+//     } else if (type === 'ajax') {
+//         // same as above
+//     }
+// }
+
+// function parseDataPlatform2({ type, response }) {
+//     if (type === 'fetch') {
+//         if (!response.ok) {
+//             return {
+//                 error: 1,
+//             };
+//         } else {
+//             if (response.data.error_code !== '0') {
+//                 return {
+//                     error: 2,
+//                 };
+//             }
+//         }
+//         return {
+//             error: 0,
+//         };
+//     } else if (type === 'ajax') {
+//         // same as above
+//     }
+// }
+
 // 覆写fetch API
 function replaceFetch() {
     if (!window.fetch) return;
     const _originFetch = window.fetch;
-    window.fetch = function () {
+    window.fetch = function fetch() {
         return _originFetch
             .apply(this, arguments)
             .then(function (res) {
@@ -142,11 +183,15 @@ function replaceFetch() {
                     reportFetchError(res);
                 }
 
+                const forkedRes = res.clone();
+
+                const error = parseData(forkedRes);
+
                 return res;
             })
             .catch(function (error) {
                 reportFetchError(error);
-                return error;
+                throw error;
             });
     };
 }
