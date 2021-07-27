@@ -11,13 +11,31 @@
                 <input type="button" value="点击抛出错误" onclick="errorClick()" />
                 <input type="button" value="点击抛出Promise错误" onclick="promiseErrorClick()" />
                 <input type="button" value="静态资源加载错误" onclick="resourceErrorClick()" />
+                <br />
+                <br />
+                <input type="button" value="ajax正常请求" onclick="ajaxNormalClick()" />
+                <input type="button" value="ajax参数请求错误" onclick="ajaxParamsErrorClick()" />
                 <input type="button" value="ajax请求错误" onclick="ajaxErrorClick()" />
+                <br />
+                <br />
+                <input type="button" value="Fetch请求正常" onclick="fetchNormalClick()" />
+                <input type="button" value="Fetch参数请求错误" onclick="fetchParamsErrorClick()" />
                 <input type="button" value="Fetch请求错误" onclick="fetchErrorClick()" />
+                <br />
+                <br />
+                <input type="button" value="script error DOM0" onclick="a()" />
+                <input type="button" value="script error DOM2" id="testScriptError" />
+                <!-- <input type="button" value="b.js" onclick="b()" /> -->
             </div>
         </div>
+        <script src="./inject-event-target.js"></script>
         <script src="./monitor.js"></script>
+        <script src="http://127.0.0.1:3200/a.js"></script>
         <!-- <script src="a.js"></script> -->
         <script>
+            const apiErrorUrl = 'http://127.0.0.1:3200/apiError';
+            const apiNormalUrl = 'http://127.0.0.1:3200/normal';
+            const apiParamsErrorUrl = 'http://127.0.0.1:3200/apiParamsError';
             // console.log(a);
             // const log = document.querySelector('.event-log-contents');
             // console.log(log);
@@ -47,6 +65,12 @@
                 });
                 // Promise.reject('promise error');
             }
+            // 资源异常
+            function resourceErrorClick() {
+                const a = document.createElement('script');
+                a.src = './b.js';
+                document.body.appendChild(a);
+            }
             const getJSON = function (url) {
                 const promise = new Promise(function (resolve, reject) {
                     const handler = function () {
@@ -69,16 +93,7 @@
 
                 return promise;
             };
-            function ajaxErrorClick() {
-                getJSON('http://127.0.0.1:3200/login').then(
-                    function (json) {
-                        console.log('Contents: ' + json);
-                    },
-                    function (error) {
-                        console.error('出错了', error);
-                    }
-                );
-            }
+
             // 封装的请求方法
             function Fetch(url, method = 'POST', data) {
                 return new Promise((resolve, reject) => {
@@ -108,16 +123,55 @@
                         });
                 });
             }
-            function fetchErrorClick() {
-                Fetch('http://127.0.0.1:3200/login', 'GET').then((res) => {
+
+            function ajaxErrorClick() {
+                getJSON(apiErrorUrl).then(
+                    function (json) {
+                        console.log('Contents: ', json);
+                    },
+                    function (error) {
+                        console.error('出错了', error);
+                    }
+                );
+            }
+            function ajaxNormalClick() {
+                getJSON(apiNormalUrl).then(
+                    function (json) {
+                        console.log('Contents: ', json);
+                    },
+                    function (error) {
+                        console.error('出错了', error);
+                    }
+                );
+            }
+            function ajaxParamsErrorClick() {
+                getJSON(apiParamsErrorUrl).then(
+                    function (json) {
+                        console.log('Contents: ', json);
+                    },
+                    function (error) {
+                        console.error('出错了', error);
+                    }
+                );
+            }
+            function fetchNormalClick() {
+                Fetch(apiNormalUrl, 'GET').then((res) => {
                     console.log(res);
                 });
             }
-            function resourceErrorClick() {
-                const a = document.createElement('script');
-                a.src = './b.js';
-                document.body.appendChild(a);
+
+            function fetchParamsErrorClick() {
+                Fetch(apiParamsErrorUrl, 'GET').then((res) => {
+                    console.log(res);
+                });
+            }
+            function fetchErrorClick() {
+                Fetch(apiErrorUrl, 'GET').then((res) => {
+                    console.log(res);
+                });
             }
         </script>
+
+        <!-- <script src="http://127.0.0.1:3300/b.js"></script> -->
     </body>
 </html>

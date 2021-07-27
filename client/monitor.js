@@ -1,6 +1,7 @@
 window.addEventListener(
     'error',
     (event) => {
+        console.log(111, event);
         const typeName = event.target.localName;
         if (typeName) {
             console.log('静态资源加载错误', typeName, event);
@@ -17,6 +18,7 @@ window.addEventListener(
             };
             console.log(`静态资源${typeName}加载错误日志`, log);
         } else {
+            console.log(999999, event);
             const log = {
                 kind: 'stability',
                 type: 'error',
@@ -25,7 +27,7 @@ window.addEventListener(
                 message: event.message, // 报错信息
                 filename: event.filename,
                 position: `${event.lineno}: ${event.colno}`,
-                stack: event.error.stack,
+                stack: event?.error?.stack,
                 selector: '', // 代表最后一个操作元素
             };
             console.log('JS运行错误日志', log);
@@ -36,6 +38,7 @@ window.addEventListener(
     true
 );
 
+// unhandledrejection如果去掉控制台的异常显示，需要加上`e.preventDefault();  虽然可以使用增加unhandledrejection 的监听来捕获promise的异常处理，但处理fetch或者ajax的异常捕获，还是不太适合，因为他只能捕获到这个错误，而无法获取错误出现的位置和错误详情；`
 window.addEventListener('unhandledrejection', (event) => {
     console.log('Promise错误', event);
     const log = {
@@ -54,6 +57,29 @@ window.addEventListener('unhandledrejection', (event) => {
 
 function reportAjaxError(event) {
     console.log('ajax接口请求错误', event);
+    let log;
+    if (event?.currentTarget?.response) {
+        log = {
+            kind: 'stability',
+            type: 'error',
+            errType: 'ajaxApiError',
+            url: event.currentTarget.responseURL,
+            status: event.currentTarget.status,
+            message: event?.currentTarget?.response?.msg, // 报错信息
+            result: event?.currentTarget?.response?.result,
+        };
+    } else {
+        log = {
+            kind: 'stability',
+            type: 'error',
+            errType: 'ajaxError',
+            url: event.currentTarget.responseURL,
+            status: event.currentTarget.status,
+            message: event.currentTarget.statusText, // 报错信息
+        };
+    }
+
+    console.log('ajax接口请求错误日志', log);
 }
 
 // 覆写XMLHttpRequest API
@@ -64,6 +90,10 @@ function replaceAjax() {
     var _handleEvent = function (event) {
         if (event && event.currentTarget && event.currentTarget.status !== 200) {
             reportAjaxError(event);
+        } else {
+            if (event?.response?.result !== 1) {
+                reportAjaxError(event);
+            }
         }
     };
     xmlhttp.prototype.send = function () {
@@ -88,24 +118,35 @@ replaceAjax();
 
 function reportFetchError(event) {
     console.log('fetch接口请求错误', event);
+    const log = {
+        kind: 'stability',
+        type: 'error',
+        errType: 'fetchError',
+        url: event.url,
+        status: event.status,
+        message: event.statusText, // 报错信息
+    };
+    console.log('fetch接口请求错误日志', log);
 }
 
 // 覆写fetch API
 function replaceFetch() {
     if (!window.fetch) return;
-    const originFetch = window.fetch;
+    const _originFetch = window.fetch;
     window.fetch = function () {
-        return originFetch
+        return _originFetch
             .apply(this, arguments)
             .then(function (res) {
                 if (!res.ok) {
                     // True if status is HTTP 2xx
                     reportFetchError(res);
                 }
+
                 return res;
             })
             .catch(function (error) {
                 reportFetchError(error);
+                return error;
             });
     };
 }
