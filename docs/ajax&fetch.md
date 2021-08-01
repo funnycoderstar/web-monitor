@@ -51,3 +51,5 @@ readyState 从一个值变成另一个值，都会触发 readystatechange 事件
 ### load 事件
 
 用于代替 readystatechange 事件，load 事件在响应接收完成后立即触发，这样就不用检查 readyState 属性了。
+
+http code 为 404，500,的会触发 ajax load 事件。只要浏览器接收到服务器的响应，不管其状态如何，都会触发 load 事件。而这意味着你必须要检 查 status 属性。

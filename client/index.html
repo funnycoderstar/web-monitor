@@ -25,14 +25,25 @@
                 <br />
                 <input type="button" value="script error DOM0" onclick="a()" />
                 <input type="button" value="script error DOM2" id="testScriptError" />
+                <input type="button" value="点我" onclick="testFID()" />
                 <!-- <input type="button" value="b.js" onclick="b()" /> -->
             </div>
         </div>
+        <script src="./performanceMonitor.js"></script>
         <script src="./inject-event-target.js"></script>
         <script src="./monitor.js"></script>
         <script src="http://127.0.0.1:3200/a.js"></script>
         <!-- <script src="a.js"></script> -->
         <script>
+            setTimeout(() => {
+                let h1 = document.createElement('h1');
+                h1.innerHTML = '我是这个页面中最有意义的内容';
+                h1.setAttribute('elementtiming', 'meaningful');
+                document.body.appendChild(h1);
+            }, 2000);
+            function testFID() {
+                console.log(1111);
+            }
             const apiErrorUrl = 'http://127.0.0.1:3200/apiError';
             const apiNormalUrl = 'http://127.0.0.1:3200/normal';
             const apiParamsErrorUrl = 'http://127.0.0.1:3200/apiParamsError';

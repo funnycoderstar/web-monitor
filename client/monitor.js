@@ -3,7 +3,13 @@ window.addEventListener(
     (event) => {
         console.log('addEventListener error', event);
         const typeName = event.target.localName;
-        if (typeName) {
+
+        const target = event.target || event.srcElement;
+        const isElementTarget =
+            target instanceof HTMLScriptElement ||
+            target instanceof HTMLLinkElement ||
+            target instanceof HTMLImageElement;
+        if (isElementTarget) {
             console.log('静态资源加载错误', typeName, event);
             const log = {
                 kind: 'stability',
@@ -95,12 +101,28 @@ function replaceAjax() {
             }
         }
     };
+    const _load = function (event) {
+        console.log('执行ajax load 事件');
+        _handleEvent(event);
+    };
+    const _error = function (event) {
+        console.log('执行ajax error 事件');
+        _handleEvent(event);
+    };
+    const _abort = function (event) {
+        console.log('执行ajax abort 事件');
+        _handleEvent(event);
+    };
+    const _close = function (event) {
+        console.log('执行ajax close 事件');
+        _handleEvent(event);
+    };
     xmlhttp.prototype.send = function () {
         if (this['addEventListener']) {
-            this['addEventListener']('error', _handleEvent);
-            this['addEventListener']('load', _handleEvent);
-            this['addEventListener']('abort', _handleEvent);
-            this['addEventListener']('close', _handleEvent);
+            this['addEventListener']('error', _error);
+            this['addEventListener']('load', _load);
+            this['addEventListener']('abort', _abort);
+            this['addEventListener']('close', _close);
         } else {
             var _oldStateChange = this['onreadystatechange'];
             this['onreadystatechange'] = function (event) {
@@ -178,14 +200,13 @@ function replaceFetch() {
         return _originFetch
             .apply(this, arguments)
             .then(function (res) {
-                if (!res.ok) {
+                const forkedRes = res.clone();
+                if (!forkedRes.ok) {
                     // True if status is HTTP 2xx
-                    reportFetchError(res);
+                    reportFetchError(forkedRes);
                 }
 
-                const forkedRes = res.clone();
-
-                const error = parseData(forkedRes);
+                // const error = parseData(forkedRes);
 
                 return res;
             })
