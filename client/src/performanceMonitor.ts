@@ -102,10 +102,11 @@ window.onload = () => {
         console.log('firstInput', firstInput);
         if (firstInput) {
             // processingStart 开始处理的时间，startTime开始点击的时间 差值就是处理的延迟
+            // @ts-ignore
             let inputDelay = firstInput.processingStart - firstInput.startTime;
             console.log(888888);
             let duration = firstInput?.duration; // 处理的耗时
-            if (inputDelay > 0 || dutation > 0) {
+            if (inputDelay > 0 || duration > 0) {
                 const performanceLog = {
                     kind: 'experience',
                     type: 'firstInputDelay', // 首次输入延迟

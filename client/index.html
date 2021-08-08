@@ -29,12 +29,17 @@
                 <!-- <input type="button" value="b.js" onclick="b()" /> -->
             </div>
         </div>
-        <script src="./performanceMonitor.js"></script>
         <script src="./inject-event-target.js"></script>
-        <script src="./monitor.js"></script>
+        <script src="./dist/web-monitor-sdk.umd.js"></script>
         <script src="http://127.0.0.1:3200/a.js"></script>
         <!-- <script src="a.js"></script> -->
         <script>
+            const Tracker = window.webTracker;
+            const monitor = new Tracker({
+                id: '1111',
+            });
+            monitor.init();
+
             setTimeout(() => {
                 let h1 = document.createElement('h1');
                 h1.innerHTML = '我是这个页面中最有意义的内容';
@@ -142,7 +147,7 @@
                     },
                     function (error) {
                         console.error('出错了', error);
-                    }
+                    },
                 );
             }
             function ajaxNormalClick() {
@@ -152,7 +157,7 @@
                     },
                     function (error) {
                         console.error('出错了', error);
-                    }
+                    },
                 );
             }
             function ajaxParamsErrorClick() {
@@ -162,7 +167,7 @@
                     },
                     function (error) {
                         console.error('出错了', error);
-                    }
+                    },
                 );
             }
             function fetchNormalClick() {

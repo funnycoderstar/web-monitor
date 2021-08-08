@@ -1,0 +1,60 @@
+Arguments: 
+  /Users/wangyaxing/.nvm/versions/node/v14.16.1/bin/node /Users/wangyaxing/.nvm/versions/node/v14.16.1/bin/yarn add web-vitals
+
+PATH: 
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/wangyaxing/.nvm/versions/node/v14.16.1/bin:/Users/wangyaxing/homebrew/bin:/usr/local/mongodb/bin:/Users/wangyaxing/homebrew/bin:/usr/local/mongodb/bin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  14.16.1
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/webpack/-/webpack-5.47.1.tgz: ESOCKETTIMEDOUT
+      at ClientRequest.<anonymous> (/Users/wangyaxing/.nvm/versions/node/v14.16.1/lib/node_modules/yarn/lib/cli.js:141289:19)
+      at Object.onceWrapper (events.js:421:28)
+      at ClientRequest.emit (events.js:315:20)
+      at TLSSocket.emitRequestTimeout (_http_client.js:784:9)
+      at Object.onceWrapper (events.js:421:28)
+      at TLSSocket.emit (events.js:327:22)
+      at TLSSocket.Socket._onTimeout (net.js:483:8)
+      at listOnTimeout (internal/timers.js:554:17)
+      at processTimers (internal/timers.js:497:7)
+
+npm manifest: 
+  {
+      "name": "monitor-test",
+      "version": "1.0.0",
+      "description": "",
+      "main": "index.js",
+      "scripts": {
+          "test": "echo \"Error: no test specified\" && exit 1",
+          "start": "webpack serve --open"
+      },
+      "keywords": [],
+      "author": "",
+      "license": "ISC",
+      "devDependencies": {
+          "html-webpack-plugin": "^5.3.2",
+          "webpack": "^5.44.0",
+          "webpack-cli": "^4.7.2",
+          "webpack-dev-server": "^3.11.2"
+      },
+      "dependencies": {
+          "@koa/cors": "^3.1.0",
+          "koa": "^2.13.1",
+          "koa-bodyparser": "^4.3.0",
+          "koa-route": "^3.2.0",
+          "koa-static": "^5.0.0"
+      }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
