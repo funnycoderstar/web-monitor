@@ -6,12 +6,27 @@
     "module": "dist/web-monitor-sdk.es.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "export NODE_ENV=development && rollup -c rollup.config.js -w"
+        "dev": "export NODE_ENV=development && rollup -c rollup.config.js -w",
+        "commit": "git-cz",
+        "changelog": "auto-changelog"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
+    "config": {
+        "commitizen": {
+            "path": "node_modules/cz-conventional-changelog"
+        }
+    },
+    "auto-changelog": {
+        "template": "CHANGELOG.template",
+        "unreleased": true,
+        "commitLimit": false
+    },
     "devDependencies": {
+        "auto-changelog": "^2.3.0",
+        "commitizen": "^4.2.4",
+        "cz-conventional-changelog": "^3.3.0",
         "rollup": "^2.56.0",
         "rollup-plugin-commonjs": "^10.1.0",
         "rollup-plugin-json": "^4.0.0",

@@ -1,4 +1,4 @@
-function getPormanceMonitor() {
+export default function getPermanceMonitor() {
     var performance = window.performance;
 
     if (!performance) {
@@ -71,11 +71,6 @@ function getPormanceMonitor() {
         FCP,
     };
     console.log('otherPerformanceLog', otherPerformanceLog);
-}
-window.onload = () => {
-    setTimeout(() => {
-        getPormanceMonitor();
-    }, 1000);
 
     let FMP, LCP;
     // 增加一个性能条目的观察者
@@ -119,7 +114,12 @@ window.onload = () => {
         }
         observer.disconnect();
     }).observe({ type: 'first-input', buffered: true });
-};
+}
+// window.onload = () => {
+//     setTimeout(() => {
+//         getPormanceMonitor();
+//     }, 1000);
+// };
 
 // window.onload = () => {
 //     getPormanceMonitor();

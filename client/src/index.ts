@@ -1,4 +1,5 @@
 import errorMonitor from './errorMonitor';
+import getPermanceMonitor from './performanceMonitor';
 /**
  * Tracker 配置参数
  */
@@ -15,12 +16,10 @@ class MonitorTracker {
         this.options = options;
     }
     init() {
-        if (document.readyState === 'complete') {
-            // this.logPerformance();
-        } else {
-            // window.addEventListener('load', () => this.logPerformance());
+        window.addEventListener('load', () => {
             errorMonitor();
-        }
+            getPermanceMonitor();
+        });
     }
     /**
      * 获取公共信息
