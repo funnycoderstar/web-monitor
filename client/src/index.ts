@@ -1,5 +1,13 @@
 import errorMonitor from './errorMonitor';
 import getPermanceMonitor from './performanceMonitor';
+
+import * as A from 'web-vitals';
+console.log(A);
+
+// onCLS(console.log);
+// onFID(console.log);
+// onLCP(console.log);
+
 /**
  * Tracker 配置参数
  */
